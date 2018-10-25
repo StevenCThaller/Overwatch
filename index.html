@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>OVERWATCH</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function(){
+            var mapSelected = false;
+            var p1Select = false;
+            var p1Confirm = false;
+            var p2Select = false;
+            var p2Confirm = false;
+            var selectedChar = "";
+            var heroes = {  'Hanzo': 'hanzo.gif',
+                            'Reinhardt': 'reinhardt.gif',
+                            'Mercy': 'mercy.gif',
+                            'Roadhog': 'roadhog.gif',
+                            'D.Va': 'd.va.gif',
+                            'Zenyatta': 'zenyatta.gif'};
+            var htmlStr="";
+            
+            
+            function heroList() {
+                for( var k in heroes) {
+                    htmlStr += "<button class='hero' name='"+k+"'>"+k+"</button>";
+                }
+                return htmlStr;
+            }
+            $('.mapSelect .map').hover(function(){
+                var imgName = $(this).attr('id');
+                imgName = "url("+imgName+".jpg)";
+                $('.gameWindow').css("background-image", imgName);
+            }, function(){
+                $('.gameWindow').css("background-image","url(background.jpg");
+            });
+
+            $('.mapSelect .map').click(function(){
+                $('.map').unbind("mouseenter mouseleave");
+                var imgName = $(this).attr('id');
+                imgName = "url("+imgName+".jpg)"
+                $('.gameWindow').css("background-image", imgName);
+                $('#selectMap').css({"background-image": "linear-gradient(#ffde46, goldenrod)",
+                        "color": "black", "box-shadow": "1px 1px 2px black", 
+                        "border": "2px solid black"});
+                $('.map').css({"background-image": "linear-gradient(silver, white)",
+                        "color": "black", "box-shadow": "1px 1px 2px grey", 
+                        "border": "2px solid black"});
+                $(this).css({"background-image": "linear-gradient(#ffde46, goldenrod)",
+                        "color": "black", "box-shadow": "1px 1px 2px black", 
+                        "border": "2px solid black"});
+                mapSelected = true;
+            });
+
+            $('#selectMap').click(function() {
+                if(mapSelected==true) {
+                    $('.gameWindow').html(
+                        "<div class='characterSelect'><div id='playerOne'><h2>P1</h2><div class='charImg'></div></div><h3>VS.</h3><div id='playerTwo'><h2>P2</h2><div class='charImg'></div></div>"+heroList()+"<button id='confirm'>CONFIRM</button></div>");
+                }
+            });
+
+            $(document).on('click', '.hero', function(){
+                if(p1Confirm == false) {
+                    // $('#selectMap').css({"background-image": "linear-gradient(#ffde46, goldenrod)",
+                //         "color": "black", "box-shadow": "1px 1px 2px black", 
+                //         "border": "2px solid black"});
+                $('.hero').css({"background-image": "linear-gradient(silver, white)",
+                        "color": "black", "box-shadow": "1px 1px 2px grey", 
+                        "border": "2px solid black"});
+                $(this).css({"background-image": "linear-gradient(#ffde46, goldenrod)",
+                        "color": "black", "box-shadow": "1px 1px 8px 2px yellow", 
+                        "border": "2px solid black"});
+                $('#playerOne .charImg').html("<img src="+heroes[$(this).attr('name')]+">");
+                selectedChar = $(this).attr('name');
+                p1Select = true;
+                }
+
+                if(p1Confirm == true && p2Confirm == false) {
+                // $('#selectMap').css({"background-image": "linear-gradient(#ffde46, goldenrod)",
+                //         "color": "black", "box-shadow": "1px 1px 2px black", 
+                //         "border": "2px solid black"});
+                $('.hero').css({"background-image": "linear-gradient(silver, white)",
+                        "color": "black", "box-shadow": "1px 1px 2px grey", 
+                        "border": "2px solid black"});
+                $(this).css({"background-image": "linear-gradient(#ffde46, goldenrod)",
+                        "color": "black", "box-shadow": "1px 1px 8px 2px yellow", 
+                        "border": "2px solid black"});
+                $('#playerTwo .charImg').html("<img src="+heroes[$(this).attr('name')]+">");
+                selectedChar = $(this).attr('name');
+                p2Select = true;
+                }
+                
+            });
+
+            $(document).on('click', '#confirm', function() {
+                if(p1Select == true && p1Confirm == false) {
+                    $('#playerOne .charImg').html("<img src='"+heroes[selectedChar]+"'>");
+                    p1Confirm = true;
+                }
+
+                if(p2Select == true && p2Confirm == false) {
+                    $('#playerTwo .charImg').html("<img src='"+heroes[selectedChar]+"'>");
+                    p2Confirm = true;
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+    <div class="gameWindow">
+        <div class="mapSelect">
+            <h1>Select Map</h1>
+            <button class="map" id="dorado">Dorado</button>
+            <button class="map" id="hollywood">Hollywood</button>
+            <button class="map" id="kingsrow">King's Row</button>
+            <button class="map" id="numbani">Numbani</button>
+            <button class="map" id="watchpoint">Watchpoint</button>
+            <button id="selectMap">Go</button>
+        </div>
+    </div>
+</body>
+</html>
